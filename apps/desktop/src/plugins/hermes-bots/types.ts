@@ -157,11 +157,19 @@ export interface GroupHold {
   noted?: boolean
 }
 
+export interface GroupChatLimits {
+  maxContinuations: number
+  maxMessages: number
+  maxRounds: number
+}
+
 export interface GroupChat {
   /** Bumped to abandon in-flight member turns from a previous round. */
   epoch?: number
   holds?: Record<string, GroupHold>
   image?: null | string
+  /** Per-user-send safety ceilings. Missing values use the room defaults. */
+  limits?: GroupChatLimits
   log: GroupMessage[]
   members?: GroupMember[]
   /** Immutable identity, so a rename doesn't fork the room. */
