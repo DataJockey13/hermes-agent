@@ -880,6 +880,34 @@ describe('cold hydrate', () => {
     expect(merged.Shared.log.map(entry => entry.id).sort()).toEqual(['local', 'remote'])
   })
 
+  it('accepts remote room limits when pull revisions tie', async () => {
+    const { chat } = await loadRoom()
+
+    const merged = chat.mergeRemoteGroupChatSnapshotIntoRooms(
+      {
+        rooms: {
+          Shared: {
+            limits: { maxContinuations: 5, maxMessages: 30, maxRounds: 8 },
+            log: [],
+            members: [],
+            revision: 5
+          }
+        },
+        version: 3
+      },
+      {
+        Shared: {
+          limits: { maxContinuations: 2, maxMessages: 10, maxRounds: 3 },
+          log: [],
+          members: [],
+          syncRevision: 5
+        }
+      } as unknown as Record<string, GroupChat>
+    )
+
+    expect(merged.Shared.limits).toEqual({ maxContinuations: 5, maxMessages: 30, maxRounds: 8 })
+  })
+
   it('seats a member once when the projection re-derived its label and handle', async () => {
     const { chat } = await loadRoom()
 

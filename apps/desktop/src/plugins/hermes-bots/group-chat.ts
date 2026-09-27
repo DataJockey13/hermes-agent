@@ -837,7 +837,7 @@ export function mergeRemoteGroupChatSnapshotIntoRooms(
       externalCursors:
         existing.externalCursors && typeof existing.externalCursors === 'object' ? existing.externalCursors : {},
       members: [...members.values()],
-      limits: groupChatLimits(!isPreserved && remoteRevision > localRevision ? projected : existing),
+      limits: groupChatLimits(!isPreserved && remoteRevision >= localRevision ? projected : existing),
       ...(projectedRoomId || existing.roomId
         ? {
             roomId: existing.roomId || projectedRoomId
